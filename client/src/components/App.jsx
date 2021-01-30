@@ -4,7 +4,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import $ from 'jquery';
-import Reviews from './reviews/reviews.jsx';
+import Reviews from './reviews/Reviews.jsx';
 import StarRatings from './StarRatings.jsx';
 import ReviewSummary from './reviewSummary/ReviewSummary.jsx';
 import testdata from './testdata.js';
@@ -14,7 +14,7 @@ const Body = styled.div`
   padding-left: 30px;
   padding-right: 30px;
   display: block;
-  margin-left: 152.5px;
+  // margin-left: 152.5px;
 `;
 const Dropdown = styled.div`
   cursor: pointer;
@@ -25,17 +25,24 @@ const Dropdown = styled.div`
   font-size: 24px;
   border-top: 1px solid #c5cbd5;
   border-bottom: 1px solid #c5cbd5;
+  justify-content: space-between;
 `;
 const ReviewTitle = styled.div`
   font-weight: bold;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Icons = styled.div`
   display:flex;
   vertical-align: baseline;
+  font-size: 16px;
+  padding-top: 4px;
+  justify-content: space-between;
 `;
 const Chevron = styled.div`
   text-align: right;
+  font-size: 24px;
 `;
 
 class App extends React.Component {
@@ -160,26 +167,65 @@ class App extends React.Component {
     };
 
     return (
-      <Body>
-        <Dropdown role="button" tabIndex="0" onClick={this.handleKeyPress} onKeyPress={this.handleKeyPress}>
-          <ReviewTitle>Reviews</ReviewTitle>
-          <Icons style={{ display: (dropDown ? 'none' : '') }}>
-            <StarRatings rating={averageRating} sizing={16} />
-            <div>
-              (
-              {reviews.length}
-              )
-            </div>
+      <div>
+        <Body>
+          <Dropdown>
+            <ReviewTitle>
+              Overview
+            </ReviewTitle>
             <Chevron>
               <i className="fas fa-chevron-down" />
             </Chevron>
-          </Icons>
-        </Dropdown>
-        <div style={{ display: (dropDown ? 'block' : 'none') }}>
-          <ReviewSummary rating={averageRating} numReviews={reviews.length} recommends={totalRecommends} numbers={numbers} applyFilter={this.applyFilter} mentions={mentions} />
-          <Reviews reviews={reviews} filter={filter} verified={verified} applyVerifiedFilter={this.applyVerifiedFilter} />
-        </div>
-      </Body>
+          </Dropdown>
+          <Dropdown>
+            <ReviewTitle>
+              Specifications
+            </ReviewTitle>
+            <Chevron>
+              <i className="fas fa-chevron-down" />
+            </Chevron>
+          </Dropdown>
+          <Dropdown role="button" tabIndex="0" onClick={this.handleKeyPress} onKeyPress={this.handleKeyPress}>
+            <ReviewTitle>
+              Reviews
+              <Icons style={{ display: (dropDown ? 'none' : '') }}>
+                {' '}
+                <StarRatings rating={averageRating} sizing={16} />
+                {' '}
+                <div>
+                  (
+                  {reviews.length}
+                  )
+                </div>
+                {' '}
+              </Icons>
+            </ReviewTitle>
+            <Chevron>
+              <i className="fas fa-chevron-down" />
+            </Chevron>
+          </Dropdown>
+          <div style={{ display: (dropDown ? 'block' : 'none') }}>
+            <ReviewSummary rating={averageRating} numReviews={reviews.length} recommends={totalRecommends} numbers={numbers} applyFilter={this.applyFilter} mentions={mentions} />
+            <Reviews reviews={reviews} filter={filter} verified={verified} applyVerifiedFilter={this.applyVerifiedFilter} />
+          </div>
+          <Dropdown>
+            <ReviewTitle>
+              Questions & Answers
+            </ReviewTitle>
+            <Chevron>
+              <i className="fas fa-chevron-down" />
+            </Chevron>
+          </Dropdown>
+          <Dropdown>
+            <ReviewTitle>
+              Buying Options
+            </ReviewTitle>
+            <Chevron>
+              <i className="fas fa-chevron-down" />
+            </Chevron>
+          </Dropdown>
+        </Body>
+      </div>
     );
   }
 }

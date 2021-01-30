@@ -15,6 +15,7 @@ const TopBar = styled.div`
   padding-top: 24px;
   padding-bottom: 24px;
   border-bottom: 1px solid gray;
+  justify-content: space-between;
 `;
 
 const VerifiedButton = styled.div`
@@ -42,7 +43,6 @@ const Bolded = styled.span`
 
 const SortDropDown = styled.select`
   position: relative;
-  left: 750px;
   height: auto;
   color: #040c13;
   border: 1px solid #c5cbd5;
@@ -96,10 +96,84 @@ const SeeAll = styled.div`
   display: inline-block;
   margin: auto;
 `;
+
+const mostHelpfulSort = (reviews) => {
+  const sorted = reviews;
+  for (let i = 0; i < sorted.length; i += 1) {
+    for (let j = 0; j < sorted.length; j += 1) {
+      if (sorted[i].helpful > sorted[j].helpful) {
+        const temp = sorted[j];
+        sorted[j] = sorted[i];
+        sorted[i] = temp;
+      }
+    }
+  }
+  return sorted;
+};
+
+const mostRecentSort = (reviews) => {
+  const sorted = reviews;
+  for (let i = 0; i < sorted.length; i += 1) {
+    for (let j = 0; j < sorted.length; j += 1) {
+      const dateOfI = new Date(sorted[i].reviewDate);
+      const dateofJ = new Date(sorted[j].reviewDate);
+      if (dateOfI > dateofJ) {
+        const temp = sorted[j];
+        sorted[j] = sorted[i];
+        sorted[i] = temp;
+      }
+    }
+  }
+  return sorted;
+};
+
+const oldestSort = (reviews) => {
+  const sorted = reviews;
+  for (let i = 0; i < sorted.length; i += 1) {
+    for (let j = 0; j < sorted.length; j += 1) {
+      const dateOfI = new Date(sorted[i].reviewDate);
+      const dateofJ = new Date(sorted[j].reviewDate);
+      if (dateOfI < dateofJ) {
+        const temp = sorted[j];
+        sorted[j] = sorted[i];
+        sorted[i] = temp;
+      }
+    }
+  }
+  return sorted;
+};
+const highestRatedSort = (reviews) => {
+  const sorted = reviews;
+  for (let i = 0; i < sorted.length; i += 1) {
+    for (let j = 0; j < sorted.length; j += 1) {
+      if (sorted[i].rating > sorted[j].rating) {
+        const temp = sorted[j];
+        sorted[j] = sorted[i];
+        sorted[i] = temp;
+      }
+    }
+  }
+  return sorted;
+};
+const lowestRatedSort = (reviews) => {
+  const sorted = reviews;
+  for (let i = 0; i < sorted.length; i += 1) {
+    for (let j = 0; j < sorted.length; j += 1) {
+      if (sorted[i].rating < sorted[j].rating) {
+        const temp = sorted[j];
+        sorted[j] = sorted[i];
+        sorted[i] = temp;
+      }
+    }
+  }
+  return sorted;
+};
+
 const Reviews = ({
   reviews, filter, verified, applyVerifiedFilter,
 }) => {
   const [seeMore, setSeeMore] = useState(false);
+  const [sortBy, setSortBy] = useState('most-relevant');
   const filteredReviews = [];
   let verifiedReviews = [];
   for (let i = 0; i < reviews.length; i += 1) {
@@ -119,6 +193,17 @@ const Reviews = ({
     }
   } else {
     verifiedReviews = filteredReviews;
+  }
+  if (sortBy === 'most-helpful') {
+    verifiedReviews = mostHelpfulSort(verifiedReviews);
+  } else if (sortBy === 'most-recent') {
+    verifiedReviews = mostRecentSort(verifiedReviews);
+  } else if (sortBy === 'oldest') {
+    verifiedReviews = oldestSort(verifiedReviews);
+  } else if (sortBy === 'highest-rated') {
+    verifiedReviews = highestRatedSort(verifiedReviews);
+  } else if (sortBy === 'lowest-rated') {
+    verifiedReviews = lowestRatedSort(verifiedReviews);
   }
   let displayNumber = verifiedReviews.length;
   if (displayNumber > 8) {
@@ -145,13 +230,13 @@ const Reviews = ({
             <Bolded>Verified Purchases</Bolded>
           </ShowVerifiedPurchasesText>
         </VerifiedButton>
-        <SortDropDown>
-          <option value="0">Most Relevant</option>
-          <option value="1">Most Helpful</option>
-          <option value="2">Most Recent</option>
-          <option value="3">Oldest</option>
-          <option value="4">Highest Rated</option>
-          <option value="5">Lowest Rated</option>
+        <SortDropDown onChange={(e) => { setSortBy(e.target.value); }}>
+          <option value="most-relevant">Most Relevant</option>
+          <option value="most-helpful">Most Helpful</option>
+          <option value="most-recent">Most Recent</option>
+          <option value="oldest">Oldest</option>
+          <option value="highest-rated">Highest Rated</option>
+          <option value="lowest-rated">Lowest Rated</option>
         </SortDropDown>
       </TopBar>
       <Showing>
